@@ -1,6 +1,5 @@
 import * as LitJsSdk from "@lit-protocol/lit-node-client-nodejs";
 
-import * as u8a from "uint8arrays";
 import ethers from "ethers";
 import siwe from "siwe";
 import dotenv from "dotenv";
@@ -63,38 +62,32 @@ async function main() {
 
 	// 1. Encryption
 	// <Blob> encryptedString
-	// <Uint8Array(32)> symmetricKey
-	const { encryptedString, symmetricKey } = await LitJsSdk.encryptString(messageToEncrypt);
+	// <Uint8Array(32)> dataToEncryptHash
+	const { ciphertext, dataToEncryptHash} = await LitJsSdk.encryptString({
+        authSig,
+        accessControlConditions,
+        dataToEncrypt: messageToEncrypt,
+        chain: 'ethereum',
+    }, litNodeClient);
 
-	// 2. Saving the Encrypted Content to the Lit Nodes
-	// <Unit8Array> encryptedSymmetricKey
-	const encryptedSymmetricKey = await litNodeClient.saveEncryptionKey({
-		accessControlConditions,
-		symmetricKey,
-		authSig,
-		chain,
-	});
-
-	// 3. Decrypt it
+	// 2. Decrypt it
 	// <String> toDecrypt
-	const toDecrypt = LitJsSdk.uint8arrayToString(encryptedSymmetricKey, "base16");
-
-	// <Uint8Array(32)> _symmetricKey
-	const _symmetricKey = await litNodeClient.getEncryptionKey({
-		accessControlConditions,
-		toDecrypt,
-		chain,
-		authSig,
-	});
-
-	// <String> decryptedString
+	// <Uint8Array(32)> dataToEncryptHash
 	let decryptedString;
 
-	try {
-		decryptedString = await LitJsSdk.decryptString(encryptedString, _symmetricKey);
-	} catch (e) {
-		console.log(e);
-	}
+    try{
+        decryptedString = await LitJsSdk.decryptToString(
+            {
+            authSig,
+            accessControlConditions,
+            ciphertext,
+            dataToEncryptHash,
+            chain: 'ethereum',
+            }, litNodeClient
+        );
+    }catch(e){
+        console.log(e);
+    }
 
 	console.warn("decryptedString:", decryptedString);
 }
