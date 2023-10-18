@@ -11,7 +11,7 @@
 	"license": "ISC",
 	"type": "module",
 	"dependencies": {
-		"@irys/sdk": "^0.0.3",
+		"@irys/sdk": "^0.0.4",
 		"@lit-protocol/lit-node-client-nodejs": "^3.0.7",
 		"dotenv": "^16.3.1",
 		"ethers": "^5.6.9",
