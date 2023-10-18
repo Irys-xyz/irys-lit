@@ -99,13 +99,11 @@ async function encryptData(dataToEncrypt) {
 		},
 		litNodeClient,
 	);
-	console.log("just encrypted this ciphertext=", ciphertext);
 	return [ciphertext, dataToEncryptHash];
 }
 
-async function decryptData(ciphertext, dataToEncryptHash) {
+async function decryptData(ciphertext, dataToEncryptHash, accessControlConditions) {
 	const authSig = await getAuthSig();
-	const accessControlConditions = getAccessControlConditions();
 	const litNodeClient = await getLitNodeClient();
 
 	// <String> toDecrypt
@@ -142,7 +140,7 @@ async function retrieveFromIrys(id) {
 		}
 
 		const data = await response.json();
-		return [data.cipherText, data.dataToEncryptHash];
+		return [data.cipherText, data.dataToEncryptHash, data.accessControlConditions];
 	} catch (e) {
 		console.log("Error retrieving data ", e);
 	}
@@ -154,6 +152,7 @@ async function storeOnIrys(cipherText, dataToEncryptHash) {
 	const dataToUpload = {
 		cipherText: cipherText,
 		dataToEncryptHash: dataToEncryptHash,
+		accessControlConditions: getAccessControlConditions(),
 	};
 
 	let receipt;
@@ -180,9 +179,11 @@ async function main() {
 
 	// 3. Retrieve data stored on Irys
 	// In real world applications, you could wait any amount of time before retrieving and decrypting
-	const [cipherTextRetrieved, dataToEncryptHashRetrieved] = await retrieveFromIrys(encryptedDataID);
+	const [cipherTextRetrieved, dataToEncryptHashRetrieved, accessControlConditions] = await retrieveFromIrys(
+		encryptedDataID,
+	);
 	// 4. Decrypt data
-	const decryptedString = await decryptData(cipherTextRetrieved, dataToEncryptHashRetrieved);
+	const decryptedString = await decryptData(cipherTextRetrieved, dataToEncryptHashRetrieved, accessControlConditions);
 	console.log("decryptedString:", decryptedString);
 }
 
