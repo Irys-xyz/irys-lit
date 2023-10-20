@@ -171,7 +171,7 @@ async function main() {
 
 	// 1. Encrypt data
 	const [cipherText, dataToEncryptHash] = await encryptData(messageToEncrypt);
-	console.log("ciphertext=", cipherText);
+
 	// 2. Store cipherText and dataToEncryptHash on Irys
 	const encryptedDataID = await storeOnIrys(cipherText, dataToEncryptHash);
 
