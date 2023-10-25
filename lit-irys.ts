@@ -1,12 +1,19 @@
 import * as LitJsSdk from "@lit-protocol/lit-node-client-nodejs";
 import Irys from "@irys/sdk";
-import ethers from "ethers";
+import { Wallet, utils } from "ethers";
 import siwe from "siwe";
 import dotenv from "dotenv";
 dotenv.config();
 
+type AuthSigType = {
+	sig: string;
+	derivedVia: string;
+	signedMessage: string;
+	address: string;
+};
+
 // Returns a configured Irys object
-async function getIrys() {
+async function getIrys(): Promise<Irys> {
 	const url = "https://devnet.irys.xyz";
 	const providerUrl = "https://rpc-mumbai.maticvigil.com";
 	const token = "matic";
@@ -14,14 +21,14 @@ async function getIrys() {
 	const irys = new Irys({
 		url, // URL of the node you want to connect to
 		token, // Token used for payment
-		key: process.env.PRIVATE_KEY, // Private key
+		key: process.env.PRIVATE_KEY as string, // Private key
 		config: { providerUrl }, // Optional provider URL, only required when using Devnet
 	});
 	return irys;
 }
 
 // Returns a configured Lit node object
-async function getLitNodeClient() {
+async function getLitNodeClient(): Promise<LitJsSdk.LitNodeClientNodeJs> {
 	// Initialize LitNodeClient
 	const litNodeClient = new LitJsSdk.LitNodeClientNodeJs({
 		alertWhenUnauthorized: false,
@@ -32,15 +39,15 @@ async function getLitNodeClient() {
 	return litNodeClient;
 }
 
-async function getAuthSig() {
+async function getAuthSig(): Promise<AuthSigType> {
 	// Initialize the signer
-	const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
-	const address = ethers.utils.getAddress(await wallet.getAddress());
+	const wallet = new Wallet(process.env.PRIVATE_KEY as string);
+	const address = utils.getAddress(await wallet.getAddress());
 
 	// Craft the SIWE message
 	const domain = "localhost";
 	const origin = "https://localhost/login";
-	const statement = "This is a test statement. You can put anything you want here.";
+	const statement = "This is a test statement.  You can put anything you want here.";
 	const siweMessage = new siwe.SiweMessage({
 		domain,
 		address: address,
@@ -53,7 +60,7 @@ async function getAuthSig() {
 
 	// Sign the message and format the authSig
 	const signature = await wallet.signMessage(messageToSign);
-	const authSig = {
+	const authSig: AuthSigType = {
 		sig: signature,
 		derivedVia: "web3.eth.personal.sign",
 		signedMessage: messageToSign,
@@ -63,10 +70,7 @@ async function getAuthSig() {
 	return authSig;
 }
 
-// This defines who can decrypt the data
-// https://developer.litprotocol.com/v3/sdk/access-control/evm/basic-examples
-function getAccessControlConditions() {
-	// Anyone with a balance of >= ETH can decrypt (AKA: Anyone can)
+function getAccessControlConditions(): any[] {
 	const accessControlConditions = [
 		{
 			contractAddress: "",
@@ -81,46 +85,15 @@ function getAccessControlConditions() {
 		},
 	];
 
-	// Only wallet id: 0x50e2dac5e78B5905CB09495547452cEE64426db2
-	// const accessControlConditions = [
-	// 	{
-	// 		contractAddress: "",
-	// 		standardContractType: "",
-	// 		chain,
-	// 		method: "",
-	// 		parameters: [":userAddress"],
-	// 		returnValueTest: {
-	// 			comparator: "=",
-	// 			value: "0x50e2dac5e78B5905CB09495547452cEE64426db2",
-	// 		},
-	// 	},
-	// ];
-
-	// Must possess an ERC721
-	// const accessControlConditions = [
-	// 	{
-	// 		contractAddress: "0xA80617371A5f511Bf4c1dDf822E6040acaa63e71",
-	// 		standardContractType: "ERC721",
-	// 		chain,
-	// 		method: "balanceOf",
-	// 		parameters: [":userAddress"],
-	// 		returnValueTest: {
-	// 			comparator: ">",
-	// 			value: "0",
-	// 		},
-	// 	},
-	// ];
 	return accessControlConditions;
 }
 
-async function encryptData(dataToEncrypt) {
+async function encryptData(dataToEncrypt: string): Promise<[string, Uint8Array]> {
 	const authSig = await getAuthSig();
 	const accessControlConditions = getAccessControlConditions();
 	const litNodeClient = await getLitNodeClient();
 
 	// 1. Encryption
-	// <Blob> encryptedString
-	// <Uint8Array(32)> dataToEncryptHash
 	const { ciphertext, dataToEncryptHash } = await LitJsSdk.encryptString(
 		{
 			authSig,
@@ -133,11 +106,16 @@ async function encryptData(dataToEncrypt) {
 	return [ciphertext, dataToEncryptHash];
 }
 
-async function decryptData(ciphertext, dataToEncryptHash, accessControlConditions) {
+async function decryptData(
+	ciphertext: string,
+	dataToEncryptHash: Uint8Array,
+	accessControlConditions: any[],
+): Promise<string> {
 	const authSig = await getAuthSig();
 	const litNodeClient = await getLitNodeClient();
 
-	let decryptedString;
+	let decryptedString: string;
+
 	try {
 		decryptedString = await LitJsSdk.decryptToString(
 			{
@@ -155,8 +133,7 @@ async function decryptData(ciphertext, dataToEncryptHash, accessControlCondition
 
 	return decryptedString;
 }
-
-async function retrieveFromIrys(id) {
+async function retrieveFromIrys(id: string): Promise<[string, Uint8Array, any[]]> {
 	const gatewayAddress = "https://gateway.irys.xyz/";
 	const url = `${gatewayAddress}${id}`;
 
@@ -174,7 +151,7 @@ async function retrieveFromIrys(id) {
 	}
 }
 
-async function storeOnIrys(cipherText, dataToEncryptHash) {
+async function storeOnIrys(cipherText: string, dataToEncryptHash: Uint8Array): Promise<string> {
 	const irys = await getIrys();
 
 	const dataToUpload = {
@@ -191,10 +168,10 @@ async function storeOnIrys(cipherText, dataToEncryptHash) {
 		console.log("Error uploading data ", e);
 	}
 
-	return receipt?.id;
+	return receipt?.id as string;
 }
 
-async function main() {
+async function main(): Promise<void> {
 	const messageToEncrypt = "Irys + Lit is 🔥x2";
 
 	// 1. Encrypt data
@@ -206,10 +183,10 @@ async function main() {
 	console.log(`Data stored at https://gateway.irys.xyz/${encryptedDataID}`);
 
 	// 3. Retrieve data stored on Irys
-	// In real world applications, you could wait any amount of time before retrieving and decrypting
 	const [cipherTextRetrieved, dataToEncryptHashRetrieved, accessControlConditions] = await retrieveFromIrys(
 		encryptedDataID,
 	);
+
 	// 4. Decrypt data
 	const decryptedString = await decryptData(cipherTextRetrieved, dataToEncryptHashRetrieved, accessControlConditions);
 	console.log("decryptedString:", decryptedString);
