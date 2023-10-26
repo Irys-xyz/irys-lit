@@ -27,33 +27,13 @@ This repository teaches you how to:
     1. Obtain a wallet signature ([`AuthSig`](https://developer.litprotocol.com/v3/sdk/authentication/overview#obtain-an-authsig)), which proves you own a wallet
     2. Connect to a Lit node and request that it decrypt your data
 
-## Access control conditions
+## More information
 
-Lit Protocol enables users to set [access control conditions](https://developer.litprotocol.com/v3/sdk/access-control/intro) specifying who can decrypt data. This provides builders with the flexibility to designate data decryption permissions based on:
+For a deeper dive, check out our docs:
 
--   A single wallet address
--   DAO membership
--   Owners of an ERC20 or ERC721
--   Outcomes from a smart contract call
--   Outcomes from an API call.
-
-To ensure anyone can run the code in this repository, it uses the following for access control, allowing anyone with an ETH balance >= 0 to decrypt.
-
-```ts
-const accessControlConditions = [
-	{
-		contractAddress: "",
-		standardContractType: "",
-		chain: "ethereum",
-		method: "eth_getBalance",
-		parameters: [":userAddress", "latest"],
-		returnValueTest: {
-			comparator: ">=",
-			value: "0", // 0 ETH, so anyone can decrypt
-		},
-	},
-];
-```
+-   E[ncrypting on-chain data overview](http://docs.irys.xyz/hands-on/tutorials/encrypting-on-chain-data)
+-   [Encrypting data server-side](http://docs.irys.xyz/hands-on/tutorials/server-side-encryption)
+-   [Encrypting data in the browser](http://docs.irys.xyz/hands-on/tutorials/browser-based-encryption)
 
 ## Installation
 
@@ -62,7 +42,7 @@ const accessControlConditions = [
 3. `cd irys-lit`
 4. `yarn`
 
-> Install with yarn only. There is currently a bug in the npm install script, it will be fixed soon
+> Install with yarn only. There is currently a bug in the Lit Protocol npm install script, it will be fixed soon
 
 ## Running
 
