@@ -31,7 +31,7 @@ This repository teaches you how to:
 
 For a deeper dive, check out our docs:
 
--   E[ncrypting on-chain data overview](http://docs.irys.xyz/hands-on/tutorials/encrypting-on-chain-data)
+-   [Encrypting on-chain data overview](http://docs.irys.xyz/hands-on/tutorials/encrypting-on-chain-data)
 -   [Encrypting data server-side](http://docs.irys.xyz/hands-on/tutorials/server-side-encryption)
 -   [Encrypting data in the browser](http://docs.irys.xyz/hands-on/tutorials/browser-based-encryption)
 
