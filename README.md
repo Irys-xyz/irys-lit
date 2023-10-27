@@ -15,19 +15,28 @@ This repository teaches you how to:
 -   [Irys](https://docs.irys.xyz/) for uploading data
 -   [Lit v3](https://developer.litprotocol.com/v3/) for encrypting and decrypting data
 
-## Steps
+## Encrypting data
 
-1. Encrypt data
-    1. Obtain a wallet signature ([`AuthSig`](https://developer.litprotocol.com/v3/sdk/authentication/overview#obtain-an-authsig)), which proves you own a wallet
-    2. Define [access control conditions](https://developer.litprotocol.com/v3/sdk/access-control/intro) for who can decrypt your data
-    3. Connect to a Lit node and request that it encrypt your data
-2. Store encrypted data on Irys
-3. Retrieve encrypted data from Irys
-4. Decrypt data
-    1. Obtain a wallet signature ([`AuthSig`](https://developer.litprotocol.com/v3/sdk/authentication/overview#obtain-an-authsig)), which proves you own a wallet
-    2. Connect to a Lit node and request that it decrypt your data
+![](./assets/irys-lit-encrypting.png)
+There are three steps to encrypting data
 
-## More information
+-   Obtain a wallet signature ([AuthSig](https://developer.litprotocol.com/v3/sdk/authentication/overview#obtain-an-authsig)), which proves you own a wallet
+-   Define [access control conditions](https://developer.litprotocol.com/v3/sdk/access-control/intro) for who can decrypt your data
+-   Connect to a Lit node and request that it encrypt your data
+
+Once encrypted, use Irys to store your data on Arweave.
+
+## Decrypting data
+
+![](./assets/irys-lit-decrypting.png)
+
+There are three steps to decrypting data:
+
+-   Obtain a wallet signature ([AuthSig](https://developer.litprotocol.com/v3/sdk/authentication/overview#obtain-an-authsig)), which proves you own a wallet
+-   Retrieve data stored on Arweave via the Irys gateway
+-   Connect to a Lit node and request it decrypt your data
+
+## Docs
 
 For a deeper dive, check out our docs:
 
