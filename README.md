@@ -55,4 +55,4 @@ For a deeper dive, check out our docs:
 
 ## Running
 
-1. `yarn dev`
+1. `node scripts/lit-irys.js`
