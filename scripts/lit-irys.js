@@ -1,6 +1,6 @@
-import * as LitJsSdk from "@lit-protocol/lit-node-client-nodejs";
+import * as LitJsSdk from "@lit-protocol/lit-node-client";
 import Irys from "@irys/sdk";
-import ethers from "ethers";
+import { ethers } from "ethers";
 import siwe from "siwe";
 import dotenv from "dotenv";
 dotenv.config();
@@ -28,31 +28,41 @@ async function getLitNodeClient() {
 		litNetwork: "cayenne",
 	});
 	await litNodeClient.connect();
-
 	return litNodeClient;
 }
 
 async function getAuthSig() {
+	const litNodeClient = await getLitNodeClient();
+
+	let nonce = litNodeClient.getLatestBlockhash();
+
 	// Initialize the signer
 	const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
-	const address = ethers.utils.getAddress(await wallet.getAddress());
+	const address = ethers.getAddress(await wallet.getAddress());
 
 	// Craft the SIWE message
 	const domain = "localhost";
 	const origin = "https://localhost/login";
-	const statement = "This is a test statement. You can put anything you want here.";
+	const statement = "This is a test statement.  You can put anything you want here.";
+
+	// expiration time in ISO 8601 format.  This is 7 days in the future, calculated in milliseconds
+	const expirationTime = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString();
+
 	const siweMessage = new siwe.SiweMessage({
 		domain,
 		address: address,
 		statement,
 		uri: origin,
 		version: "1",
-		chainId: "1",
+		chainId: 1,
+		nonce,
+		expirationTime,
 	});
 	const messageToSign = siweMessage.prepareMessage();
 
 	// Sign the message and format the authSig
 	const signature = await wallet.signMessage(messageToSign);
+
 	const authSig = {
 		sig: signature,
 		derivedVia: "web3.eth.personal.sign",
@@ -66,7 +76,7 @@ async function getAuthSig() {
 // This defines who can decrypt the data
 // https://developer.litprotocol.com/v3/sdk/access-control/evm/basic-examples
 function getAccessControlConditions() {
-	// Anyone with a balance of >= ETH can decrypt (AKA: Anyone can)
+	// Anyone with a balance of >= ETH can decrypt (anyone)
 	const accessControlConditions = [
 		{
 			contractAddress: "",
@@ -76,7 +86,7 @@ function getAccessControlConditions() {
 			parameters: [":userAddress", "latest"],
 			returnValueTest: {
 				comparator: ">=",
-				value: "0", // 0 ETH, so anyone can open
+				value: "0000000000000", // 0 ETH, so anyone can open
 			},
 		},
 	];
