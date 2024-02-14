@@ -26,6 +26,7 @@ async function getLitNodeClient() {
 	const litNodeClient = new LitJsSdk.LitNodeClientNodeJs({
 		alertWhenUnauthorized: false,
 		litNetwork: "cayenne",
+		debug: false, // Change to true when developer if you need verbose messages
 	});
 	await litNodeClient.connect();
 	return litNodeClient;
