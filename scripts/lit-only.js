@@ -1,5 +1,4 @@
 import * as LitJsSdk from "@lit-protocol/lit-node-client";
-import Irys from "@irys/sdk";
 import { ethers } from "ethers";
 import siwe from "siwe";
 import dotenv from "dotenv";
