@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2016", // Specifies ECMAScript target version
+    "module": "commonjs", // Or "ESNext" if you need ESM support
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+    "forceConsistentCasingInFileNames": true, // Disallow inconsistently cased imports
+    "skipLibCheck": true // Skip type checking for all declaration files
+  },
+  "include": ["scripts/**/*.ts"], // Include all TS files in the "scripts" directory
+  "exclude": ["node_modules"] // Exclude "node_modules" directory
+}
