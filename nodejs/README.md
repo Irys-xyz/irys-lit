@@ -1,8 +1,8 @@
 # Node.js Integration: Irys + Lit Protocol
 
-This directory contains Node.js scripts that demonstrate the use of Lit Protocol for data encryption and decryption, combined with Irys for permanent onchain storage.
+This directory contains Node.js scripts that demonstrate the use of Lit Protocol for data encryption and decryption, combined with Irys for  onchain storage.
 
-## Setup Instructions
+## Setup
 
 1. **Rename the Environment File**
 
@@ -12,7 +12,7 @@ Copy `.env.example` to `.env`:
 cp .env.example .env
 ```
 
-Then, add a PRIVATE_KEY to your .env file. This key will be used for signing uploads to Irys.
+Then, add a PRIVATE_KEY to your .env file. This key will be used for signing uploads to Irys and proving you meet decryption conditions. 
 
 2. **Install Dependencies**
 
@@ -35,13 +35,3 @@ ts-node scripts/lit-only.ts
 ```bash
 ts-node scripts/irys-lit.ts
 ```
-
-## **Scripts Overview**
-
-- `scripts/lit-only.ts`:
-Demonstrates the use of Lit Protocol for encryption and decryption.
-No interaction with Irys; purely focuses on Lit's encryption capabilities.
-
-- `scripts/irys-lit.ts:`
-Shows how to use Lit Protocol in combination with Irys.
-Encrypts data with Lit Protocol, stores it on Irys, retrieves it, and then decrypts it.
