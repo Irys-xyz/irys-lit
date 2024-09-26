@@ -16,7 +16,7 @@ Using Lit Protocol with Irys opens up new opportunities for builders, including:
 
 ## Docs
 
-https://docs.irys.xyz/_______
+https://docs.irys.xyz/build/d/guides/encrypting-with-lit
 
 ## Sub-Repositories
 
