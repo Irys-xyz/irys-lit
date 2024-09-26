@@ -1,0 +1,35 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@irys/web-upload": "^0.0.3",
+    "@irys/web-upload-ethereum": "^0.0.3",
+    "@irys/web-upload-ethereum-ethers-v6": "^0.0.3",
+    "@lit-protocol/lit-node-client": "^6.4.10",
+    "@rainbow-me/rainbowkit": "^2.1.6",
+    "@tanstack/react-query": "^5.55.4",
+    "ethers": "^6.13.2",
+    "next": "14.2.9",
+    "react": "^18",
+    "react-dom": "^18",
+    "viem": "^2.21.4",
+    "wagmi": "^2.12.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.9",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
