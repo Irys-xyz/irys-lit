@@ -1,6 +1,6 @@
 # Next.js Integration: Irys + Lit Protocol
 
-This directory contains a Next.js application that demonstrates the use of Lit Protocol for data encryption and decryption, combined with Irys for permanent onchain storage. This application utilizes RainbowKit for wallet connection, providing a seamless Web3 experience.
+This directory contains a Next.js application that demonstrates the use of Lit Protocol for data encryption and decryption, combined with Irys for permanent onchain storage. This application uses RainbowKit for wallet connection.
 
 ## Prerequisites
 
