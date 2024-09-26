@@ -1,6 +1,6 @@
 # Irys + Lit Protocol Overview
 
-Data uploaded to Irys is stored permanently onchain. Once onchain, this data becomes publicly accessible, and anyone can view it. For projects where privacy is a concern, you can use Lit Protocol to encrypt your data before storing it on Irys.
+Use [Lit Protocol](https://www.litprotocol.com/) with [Irys](https://docs.irys.xyz) to securely encrypt and manage your onchain data.
 
 ## Irys + Lit Use Cases
 
