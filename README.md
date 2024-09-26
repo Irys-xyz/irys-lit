@@ -7,12 +7,12 @@ Data uploaded to Irys is stored permanently onchain. Once onchain, this data bec
 Using Lit Protocol with Irys opens up new opportunities for builders, including:
 
 - Gating access to content
-- Encrypting content for decentralized social application
-- Storing private DePIN data
+- Storing and securing private [DePIN data](https://docs.irys.xyz/build/d/guides/depin-data)
+- Securely archiving sensitive [AI data](https://docs.irys.xyz/build/d/guides/ai-prompts)
+- Encrypted content for decentralized social apps
 - Decentralized identity verification
 - Creating private data marketplaces
-- Creating NFTs only viewable by their owner
-- Storing private personal data on-chain
+- Creating exclusive NFTs 
 
 ## Docs
 
@@ -22,12 +22,12 @@ https://docs.irys.xyz/build/d/guides/encrypting-with-lit
 
 This repository includes the following sub-repositories:
 
-- **[Node.js](./nodejs/README.md):** Irys + Lit with NodeJS
+- **[Node.js](./nodejs/README.md):** Irys + Lit with Node.js
   - Scripts:
     - `lit-only.ts` - Encrypts a string with Lit Protocol and immediately decrypts it.
     - `irys-lit.ts` - Encrypts a string with Lit Protocol, stores it on Irys, and then retrieves it.
 
-- **[Next.js](./nextjs/README.md):** Irys + Lit with NextJS
+- **[Next.js](./nextjs/README.md):** Irys + Lit with Next.js
   - Features:
     - Wallet connection using RainbowKit.
     - Integration of Lit Protocol for data encryption.
